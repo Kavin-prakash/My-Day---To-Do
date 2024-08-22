@@ -1,1 +1,0 @@
-{"version":3,"file":"static/css/main.873757ed.css","mappings":"AAAA,KACI,gCACJ,CCFA,mBAGI,wBAAoC,CADpC,YAEJ","sources":["App.css","Components/List.css"],"sourcesContent":["body {\r\n    font-family: 'Comfortaa', sans-serif;\r\n}","#todolistcontainer\r\n{\r\n    height: 100vh;\r\n    background-color: rgb(179, 198, 198);\r\n}"],"names":[],"sourceRoot":""}
