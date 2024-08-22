@@ -7,6 +7,7 @@ import TextField from '@mui/material/TextField';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
+import Swal from "sweetalert2";
 export const List = () => {
     const [textdata, SetTextdata] = useState('');
     const [tasks, setTasks] = useState(() => {
@@ -29,7 +30,27 @@ export const List = () => {
             const updatedTasks = [...tasks, newTask];
             setTasks(updatedTasks);
             localStorage.setItem('To-do-List Data', JSON.stringify(updatedTasks));
+
             SetTextdata('');
+            const Toast = Swal.mixin({
+                toast: true,
+                position: "center",
+                showConfirmButton: false,
+                timer: 2000,
+                timerProgressBar: true,
+                customClass: {
+                    container: 'custom-toast'
+                },
+                didOpen: (toast) => {
+                    toast.onmouseenter = Swal.stopTimer;
+                    toast.onmouseleave = Swal.resumeTimer;
+                },
+            });
+            Toast.fire({
+                icon: "success",
+                title: "Task Added Successfully",
+            });
+
         }
     };
 
@@ -83,7 +104,7 @@ export const List = () => {
                 <ul style={{ textDecoration: 'none' }} >
                     {tasks.map((task) => (
                         <li key={task.id}>{task.list}
-                        <br></br>
+                            <br></br>
                             <Button onClick={() => handleEdit(task.list, task.id)} variant='contained'><EditIcon /></Button>
                             <Button onClick={() => handledeletelist(task.id)} variant='contained' color='error'><DeleteForeverIcon /></Button>
                         </li>

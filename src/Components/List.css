@@ -1,5 +1,9 @@
-#todolistcontainer
-{
+#todolistcontainer {
     height: 100vh;
     background-color: rgb(179, 198, 198);
+}
+
+.custom-toast {
+    width: 200px;
+    height: 100px;
 }
