@@ -7,7 +7,6 @@ import TextField from '@mui/material/TextField';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
-// import Swal from "sweetalert2";
 import CheckIcon from '@mui/icons-material/Check';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
@@ -15,7 +14,9 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import GitHubIcon from '@mui/icons-material/GitHub';
-
+import StarBorderIcon from '@mui/icons-material/StarBorder';
+import StarIcon from '@mui/icons-material/Star';
+import { Tooltip } from '@mui/material';
 export const List = () => {
     const [textdata, SetTextdata] = useState('');
     const [tasks, setTasks] = useState(() => {
@@ -24,7 +25,6 @@ export const List = () => {
     });
     const [updatestate, SetUpdatestate] = useState(false);
     const [editId, SeteditId] = useState(null);
-
     const handleInputchange = (event) => {
         SetTextdata(event.target.value);
     };
@@ -34,8 +34,6 @@ export const List = () => {
             updatestate ? updateTask() : AddTask();
         }
     }
-
-
     const AddTask = () => {
         if (textdata.trim()) {
             const newTask = {
@@ -47,25 +45,6 @@ export const List = () => {
             localStorage.setItem('To-do-List Data', JSON.stringify(updatedTasks));
 
             SetTextdata('');
-            // const Toast = Swal.mixin({
-            //     toast: true,
-            //     position: "top-end",
-            //     showConfirmButton: false,
-            //     timer: 500,
-            //     timerProgressBar: true,
-            //     customClass: {
-            //         container: 'custom-toast'
-            //     },
-            //     didOpen: (toast) => {
-            //         toast.onmouseenter = Swal.stopTimer;
-            //         toast.onmouseleave = Swal.resumeTimer;
-            //     },
-            // });
-            // Toast.fire({
-            //     icon: "success",
-            //     title: "Task Added Successfully",
-            // });
-
         }
     };
 
@@ -92,6 +71,19 @@ export const List = () => {
         SeteditId(null);
     }
 
+    const handleImportance = (id) => {
+        const taskIndex = tasks.findIndex(task => task.id === id);
+        if (taskIndex > -1) {
+            const updatedTasks = tasks.map(task =>
+                task.id === id ? { ...task, important: !task.important } : task
+            );
+            const [importantTask] = updatedTasks.splice(taskIndex, 1);
+            const finalTasks = [importantTask, ...updatedTasks];
+            setTasks(finalTasks);
+            localStorage.setItem('To-do-List Data', JSON.stringify(finalTasks));
+        }
+    };
+
     return (
         <>
             <div>
@@ -110,21 +102,11 @@ export const List = () => {
 
             </div>
             <Container fluid id='todolist' className='todolist-container'>
-                <Row id='header'>
-                    {/* <h2>My<CheckIcon /><b>To</b>Do Application</h2> */}
-                </Row>
                 <Row>
-                    <Col xs={2} sm={6} >
-                        {/* <DayPicker
-                            mode="single"
-                            onSelect={setSelected}
-                        /> */}
-                    </Col>
                     <Col xs={10} sm={6}>
                         <Box
                             sx={{
                                 width: '100%',
-                                // maxWidth: 800,
                                 margin: '0 auto',
                                 padding: '5px',
                             }}
@@ -138,7 +120,6 @@ export const List = () => {
                                 id="fullWidth"
                                 variant="outlined"
                                 margin="normal"
-
                             />
                         </Box>
                     </Col>
@@ -163,8 +144,17 @@ export const List = () => {
                         <li key={task.id} className='task-item'>
                             {task.list}
                             <div className='task-actions'>
-                                <Button onClick={() => handleEdit(task.list, task.id)} variant='contained' className='edit-button'><EditIcon /></Button>
-                                <Button onClick={() => handledeletelist(task.id)} variant='contained' color='error' className='delete-button'><DeleteForeverIcon /></Button>
+                                <Tooltip title={task.important ? "Importance" : "Mark as Important"} placement='top-start'>
+                                    <Button onClick={() => handleImportance(task.id)} variant='contained'>
+                                        {task.important ? <StarIcon /> : <StarBorderIcon />}
+                                    </Button>
+                                </Tooltip>
+                                <Tooltip title="Edit Task" placement='top-start'>
+                                    <Button onClick={() => handleEdit(task.list, task.id)} variant='contained' className='edit-button'><EditIcon /></Button>
+                                </Tooltip>
+                                <Tooltip title="Delete Task" placement='top-start'>
+                                    <Button onClick={() => handledeletelist(task.id)} variant='contained' color='error' className='delete-button'><DeleteForeverIcon /></Button>
+                                </Tooltip>
                             </div>
                         </li>
                     ))}
