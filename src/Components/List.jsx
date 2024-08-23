@@ -95,8 +95,13 @@ export const List = () => {
     };
     // Date only 
     const dateobject = new Date();
-    const day = dateobject.getDay();
-    const month = dateobject.getMonth();
+    console.log(dateobject);
+    const day = dateobject.getDate();  // Day
+    console.log("day",day);
+    const month = dateobject.getMonth(); // Mothn
+    const year=dateobject.getFullYear();
+
+    console.log(year);
     console.log(month)
 
     const dayarray = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
@@ -128,7 +133,7 @@ export const List = () => {
                 </Box>
             </div>
             <Row style={{ marginTop: '60px' }}>
-                <h2>{day},{monthstring}</h2>
+                <h2>{day},{monthstring} {year}</h2>
             </Row>
             <Container fluid id='todolist' className='todolist-container'>
                 <Row>
